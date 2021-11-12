@@ -1,12 +1,13 @@
 package restful;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import secondary.SecondaryMongoBean;
@@ -17,6 +18,7 @@ public class DecrypterService {
 
     @Autowired
     private SecondaryMongoBeanRepository secondaryRepository;
+    private static final int NUM_THREADS = 10;
 
     public Boolean start() {
         final String uri = "http://container2:8080/address-book/AddressEntry/getAllArray";
@@ -24,12 +26,21 @@ public class DecrypterService {
         int page = 0;
         Boolean finished = false;
         while(!finished) {
-            String result = restTemplate.getForObject( uri+"/"+(page++), String.class);
-            finished =storeBatch(result);
+            List<Integer> pageThreads = new ArrayList<Integer>();
+            for(int i=0; i< NUM_THREADS; i++) {
+                pageThreads.add(page+i);
+            }
+            Stream<Boolean> temp  =pageThreads.parallelStream().map((i) -> {
+                String result = restTemplate.getForObject( uri+"/"+(i), String.class);
+                if (storeBatch(result)) return true;
+                return false;
+            });
+            finished = temp.allMatch((b) -> b == true);
+            page += NUM_THREADS;
         }
         return true;
     }
-    
+
     private Boolean storeBatch(String result) {
         ObjectMapper m = new ObjectMapper();
         ResponseBean1[] products = null;
