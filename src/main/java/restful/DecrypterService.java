@@ -2,6 +2,7 @@ package restful;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,12 +20,12 @@ public class DecrypterService {
     @Autowired
     private SecondaryMongoBeanRepository secondaryRepository;
     private static final int NUM_THREADS = 10;
+    private Boolean finished = false;
 
     public Boolean start() {
         final String uri = "http://container2:8080/address-book/AddressEntry/getAllArray";
         RestTemplate restTemplate = new RestTemplate();
         int page = 0;
-        Boolean finished = false;
         while(!finished) {
             List<Integer> pageThreads = new ArrayList<Integer>();
             for(int i=0; i< NUM_THREADS; i++) {
@@ -32,10 +33,9 @@ public class DecrypterService {
             }
             Stream<Boolean> temp  =pageThreads.parallelStream().map((i) -> {
                 String result = restTemplate.getForObject( uri+"/"+(i), String.class);
-                if (storeBatch(result)) return true;
-                return false;
+                return (storeBatch(result));
             });
-            finished = temp.allMatch((b) -> b == true);
+            if (!finished) finished = temp.allMatch((b) -> b == true);
             page += NUM_THREADS;
         }
         return true;
@@ -64,9 +64,9 @@ public class DecrypterService {
         }
         return false;
     }
-    public Integer stop() {
-        List<SecondaryMongoBean> list = this.secondaryRepository.findAll();
-        return list.size();
+    public Long stop() {
+        finished = true;
+        return this.secondaryRepository.count();
     }
 
 

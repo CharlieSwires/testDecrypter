@@ -26,9 +26,9 @@ public class RController  {
         return new ResponseEntity<Boolean>(service.start(), HttpStatus.OK);
     }
     @GetMapping(path="/stop", produces="application/json")
-    public ResponseEntity<Integer> stop() {
+    public ResponseEntity<Long> stop() {
         
-        return new ResponseEntity<Integer>(service.stop(), HttpStatus.OK);
+        return new ResponseEntity<Long>(service.stop(), HttpStatus.OK);
     }
 
 }
