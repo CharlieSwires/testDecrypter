@@ -4,13 +4,14 @@ import java.util.Optional;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
+import org.springframework.stereotype.Repository;
 
 /**
  * Copyright 2021 Charles Swires All Rights Reserved
  * @author charl
  *
  */
-public interface PrimaryMongoBeanRepository extends MongoRepository<primary.PrimaryMongoBean, String>{
+public interface PrimaryMongoBeanRepository extends MongoRepository<PrimaryMongoBean, String>{
 
     public List<PrimaryMongoBean> findAll();
 

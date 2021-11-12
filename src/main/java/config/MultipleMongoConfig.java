@@ -9,6 +9,7 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.SimpleMongoDbFactory;
 
 import com.mongodb.MongoClient;
+import com.mongodb.client.internal.MongoClientDelegate;
 
 
 @Configuration
@@ -36,13 +37,13 @@ public class MultipleMongoConfig {
     @Bean
     @Primary
     public MongoDbFactory primaryFactory(final MongoProperties mongo) throws Exception {
-        return new SimpleMongoDbFactory(new MongoClient(mongo.getHost(), mongo.getPort()),
+        return new MongoDbFactory(new MongoClient(mongo.getHost(), mongo.getPort()),
                 mongo.getDatabase());
     }
 
     @Bean
     public MongoDbFactory secondaryFactory(final MongoProperties mongo) throws Exception {
-        return new SimpleMongoDbFactory(new MongoClient(mongo.getHost(), mongo.getPort()),
+        return new MongoDbFactory(new MongoClient(mongo.getHost(), mongo.getPort()),
                 mongo.getDatabase());
     }
 

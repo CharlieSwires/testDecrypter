@@ -2,14 +2,21 @@ package restful;
 
 import java.util.List;
 
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 
+import primary.PrimaryMongoBean;
 import primary.PrimaryMongoBeanRepository;
+import secondary.SecondaryMongoBean;
 import secondary.SecondaryMongoBeanRepository;
 
 @Service
-public class DecrypterService {
+public class DecrypterService implements InitializingBean{
+    @Autowired
+    private ApplicationContext context;
+
 
     @Autowired
     private PrimaryMongoBeanRepository primaryRepository;
@@ -18,9 +25,9 @@ public class DecrypterService {
     private SecondaryMongoBeanRepository secondaryRepository;
 
     public Boolean start() {
-       List<primary.PrimaryMongoBean> list = this.primaryRepository.findAll();
-       for (primary.PrimaryMongoBean item : list) {
-           secondary.SecondaryMongoBean newItem = new secondary.SecondaryMongoBean();
+       List<PrimaryMongoBean> list = this.primaryRepository.findAll();
+       for (PrimaryMongoBean item : list) {
+           secondary.SecondaryMongoBean newItem = new SecondaryMongoBean();
            newItem.setAddress(item.getAddress());
            newItem.setFirstname(item.getFirstname());
            newItem.setHomeTel(item.getHomeTel());
@@ -36,9 +43,12 @@ public class DecrypterService {
     }
     
     public Integer stop() {
-        List<secondary.SecondaryMongoBean> list = this.secondaryRepository.findAll();
+        List<SecondaryMongoBean> list = this.secondaryRepository.findAll();
         return list.size();
     }
 
-
+    @Override
+    public void afterPropertiesSet() {
+        context.getBean("mongoTemplate");
+    }
 }
