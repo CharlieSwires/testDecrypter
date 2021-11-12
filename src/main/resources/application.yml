@@ -1,0 +1,8 @@
+spring:
+  autoconfigure:
+    exclude: org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration
+mongodb:
+  primary:
+    uri: mongodb+srv://dbUser:PregnantPartridge2021@cluster0.icebq.mongodb.net/Address-Book?retryWrites=true&w=majority
+  secondary:
+    uri : mongodb+srv://dbUser:JakarLondoVir67@cluster0.en9ou.mongodb.net/Address-Book?retryWrites=true&w=majority
