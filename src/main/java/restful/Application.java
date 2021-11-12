@@ -3,13 +3,11 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 
-import primary.PrimaryMongoBeanRepository;
 import secondary.SecondaryMongoBeanRepository;
 
 
 @SpringBootApplication
 @EnableMongoRepositories(basePackageClasses= {
-        PrimaryMongoBeanRepository.class,
         SecondaryMongoBeanRepository.class})
 public class Application extends SpringBootServletInitializer{
 
