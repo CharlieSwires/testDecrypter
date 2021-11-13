@@ -49,6 +49,8 @@ public class DecrypterService {
 
             try {
                 products = m.readValue(result, ResponseBean[].class);
+                if (products == null || products.length == 0) return true;
+
                 for (ResponseBean item : products) {
                     SecondaryMongoBean newItem = new SecondaryMongoBean();
                     newItem.setAddress(item.getAddress());
