@@ -4,7 +4,6 @@ import java.util.Optional;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
-import org.springframework.stereotype.Repository;
 
 /**
  * Copyright 2021 Charles Swires All Rights Reserved

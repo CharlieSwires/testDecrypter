@@ -2,8 +2,6 @@ package secondary;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-
-import restful.Encryption;
 /**
  * Copyright 2021 Charles Swires All Rights Reserved
  * @author charl

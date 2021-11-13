@@ -30,5 +30,10 @@ public class RController  {
         
         return new ResponseEntity<Long>(service.stop(), HttpStatus.OK);
     }
+    @GetMapping(path="/verify", produces="application/json")
+    public ResponseEntity<Boolean> verify() {
+        
+        return new ResponseEntity<Boolean>(service.verify(), HttpStatus.OK);
+    }
 
 }
