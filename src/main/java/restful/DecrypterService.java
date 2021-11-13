@@ -2,8 +2,6 @@ package restful;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -52,7 +50,7 @@ public class DecrypterService {
             try {
                 products = m.readValue(result, ResponseBean[].class);
                 for (ResponseBean item : products) {
-                    secondary.SecondaryMongoBean newItem = new SecondaryMongoBean();
+                    SecondaryMongoBean newItem = new SecondaryMongoBean();
                     newItem.setAddress(item.getAddress());
                     newItem.setFirstname(item.getFirstname());
                     newItem.setHomeTel(item.getHomeTel());
