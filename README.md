@@ -25,5 +25,6 @@ browser
 -------
 <p>http://localhost:8886/test-decrypter/control/start</p>
 <p>http://localhost:8886/test-decrypter/control/stop</p>
+<p>http://localhost:8886/test-decrypter/control/verify</p>
 
 
