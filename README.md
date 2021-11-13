@@ -3,7 +3,7 @@ testDecrypter
 <p>in git bash</p>
 <p>git clone https://github.com/CharlieSwires/testDecrypter</p>
 
-<p>This contains both the java and React</p>
+<p>This contains the java</p>
 
 build
 -----
@@ -11,9 +11,6 @@ build
 <p>mvn package</p>
 
 <p>produces test-decrypter.war in target</p>
-
-<p>7zip test-decrypter.war</p>
-<p>remove the test-decrypter/node-nodules</p>
 
 deploy
 ------
