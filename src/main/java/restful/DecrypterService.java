@@ -85,6 +85,7 @@ public class DecrypterService {
                             item.getSurname() == null ||
                             item.getSurname().isEmpty()) return null;
                     SecondaryMongoBean newItem = secondaryRepository.findByFirstnameSurname(item.getFirstname(), item.getSurname());
+                    if (newItem == null) return null;
                     ResponseBean newResponseBean = new ResponseBean();
                     newResponseBean.setAddress(newItem.getAddress());
                     newResponseBean.setFirstname(newItem.getFirstname());
