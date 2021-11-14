@@ -22,7 +22,8 @@ public class DecrypterService {
     private SecondaryMongoBeanRepository secondaryRepository;
     private static final int NUM_THREADS = 10;
     private Boolean finished = false;
-
+    private Object sync = new Object();
+    
     public Boolean start() {
         final String uri = "http://container2:8080/address-book/AddressEntry/getAllArray";
         RestTemplate restTemplate = new RestTemplate();
@@ -37,7 +38,9 @@ public class DecrypterService {
                 String result = restTemplate.getForObject( uri+"/"+(i), String.class);
                 return (storeBatch(result));
             });
-            if (!finished) finished = !temp.anyMatch((b) -> b == false);
+            synchronized (sync) {
+                if (!finished) finished = !temp.anyMatch((b) -> b == false);
+            }
             page += NUM_THREADS;
         }
         return true;
@@ -132,7 +135,9 @@ public class DecrypterService {
             List<Boolean> result =  (temp.collect(Collectors.toList()));
 
             if (result.contains((Boolean)null)) return false;
-            if (!finished) finished = !result.contains((Boolean)false);
+            synchronized (sync) {
+                if (!finished) finished = !result.contains((Boolean)false);
+            }
             page += NUM_THREADS;
         }
         return true;
