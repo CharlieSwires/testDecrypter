@@ -38,7 +38,7 @@ public class DecrypterService {
                 String result = restTemplate.getForObject( uri+"/"+(i), String.class);
                 return (storeBatch(result));
             });
-            if (!finished.getPlain()) finished.set(!temp.anyMatch((b) -> b == false));
+            finished.compareAndSet(false, !temp.anyMatch((b) -> b == false));
             page += NUM_THREADS;
         }
         return true;
@@ -133,7 +133,7 @@ public class DecrypterService {
             List<Boolean> result =  (temp.collect(Collectors.toList()));
 
             if (result.contains((Boolean)null)) return false;
-            if (!finished.getPlain()) finished.set(!result.contains((Boolean)false));
+            finished.compareAndSet(false,!result.contains((Boolean)false));
             page += NUM_THREADS;
         }
         return true;
