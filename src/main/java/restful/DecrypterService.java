@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -96,8 +97,10 @@ public class DecrypterService {
                     newResponseBean.setTitle(newItem.getTitle());
                     newResponseBean.setWorkEmail(newItem.getWorkEmail());
                     newResponseBean.setWorkTel(newItem.getWorkTel());
-                    if(!newResponseBean.equals(item)) return null;
+                    if (!newResponseBean.equals(item)) return null;
                 }
+            } catch (IncorrectResultSizeDataAccessException ex) {
+                return null;
             } catch (Exception e) {
                 e.printStackTrace();
                 return null;
