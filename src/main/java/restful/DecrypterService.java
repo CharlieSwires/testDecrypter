@@ -2,6 +2,7 @@ package restful;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -21,15 +22,14 @@ public class DecrypterService {
     @Autowired
     private SecondaryMongoBeanRepository secondaryRepository;
     private static final int NUM_THREADS = 10;
-    private Boolean finished = false;
-    private Object sync = new Object();
+    private AtomicBoolean finished = new AtomicBoolean(false);
     
     public Boolean start() {
         final String uri = "http://container2:8080/address-book/AddressEntry/getAllArray";
         RestTemplate restTemplate = new RestTemplate();
         int page = 0;
-        finished = false;
-        while(!finished) {
+        finished.set(false);
+        while(!finished.getPlain()) {
             List<Integer> pageThreads = new ArrayList<Integer>();
             for(int i=0; i< NUM_THREADS; i++) {
                 pageThreads.add(page+i);
@@ -38,9 +38,7 @@ public class DecrypterService {
                 String result = restTemplate.getForObject( uri+"/"+(i), String.class);
                 return (storeBatch(result));
             });
-            synchronized (sync) {
-                if (!finished) finished = !temp.anyMatch((b) -> b == false);
-            }
+            if (!finished.getPlain()) finished.set(!temp.anyMatch((b) -> b == false));
             page += NUM_THREADS;
         }
         return true;
@@ -114,7 +112,7 @@ public class DecrypterService {
         return true;
     }
     public Long stop() {
-        finished = true;
+        finished.set(true);
         return this.secondaryRepository.count();
     }
 
@@ -122,8 +120,8 @@ public class DecrypterService {
         final String uri = "http://container2:8080/address-book/AddressEntry/getAllArray";
         RestTemplate restTemplate = new RestTemplate();
         int page = 0;
-        finished = false;
-        while(!finished) {
+        finished.set(false);
+        while(!finished.getPlain()) {
             List<Integer> pageThreads = new ArrayList<Integer>();
             for(int i=0; i< NUM_THREADS; i++) {
                 pageThreads.add(page+i);
@@ -135,9 +133,7 @@ public class DecrypterService {
             List<Boolean> result =  (temp.collect(Collectors.toList()));
 
             if (result.contains((Boolean)null)) return false;
-            synchronized (sync) {
-                if (!finished) finished = !result.contains((Boolean)false);
-            }
+            if (!finished.getPlain()) finished.set(!result.contains((Boolean)false));
             page += NUM_THREADS;
         }
         return true;
