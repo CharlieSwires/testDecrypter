@@ -2,6 +2,7 @@ package restful;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -83,11 +84,8 @@ public class DecrypterService {
                 if (products == null || products.length == 0) return true;
                 for (ResponseBean2 item : products) {
                     if (item == null) return true;
-                    if (item.getFirstname() == null ||
-                            item.getFirstname().isEmpty() ||
-                            item.getSurname() == null ||
-                            item.getSurname().isEmpty()) return null;
-                    SecondaryMongoBean newItem = secondaryRepository.findByFirstnameSurname(item.getFirstname(), item.getSurname());
+                    Optional<SecondaryMongoBean> newItem2 = secondaryRepository.findById(item.getId());
+                    SecondaryMongoBean newItem = (newItem2.isPresent()) ? newItem2.get() : null;
                     if (newItem == null) return null;
                     ResponseBean2 newResponseBean = new ResponseBean2();
                     newResponseBean.setId(newItem.getId());
