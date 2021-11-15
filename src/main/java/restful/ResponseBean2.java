@@ -1,10 +1,11 @@
 package restful;
 
-public class ResponseBean {
-    public ResponseBean() {
+public class ResponseBean2 {
+    public ResponseBean2() {
         
     }
     //in the clear
+    private String id;
     private String title;
     private String firstname;
     private String surname;
@@ -76,6 +77,7 @@ public class ResponseBean {
         result = prime * result + ((address == null) ? 0 : address.hashCode());
         result = prime * result + ((firstname == null) ? 0 : firstname.hashCode());
         result = prime * result + ((homeTel == null) ? 0 : homeTel.hashCode());
+        result = prime * result + ((id == null) ? 0 : id.hashCode());
         result = prime * result + ((mobile == null) ? 0 : mobile.hashCode());
         result = prime * result + ((personalEmail == null) ? 0 : personalEmail.hashCode());
         result = prime * result + ((surname == null) ? 0 : surname.hashCode());
@@ -92,7 +94,7 @@ public class ResponseBean {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        ResponseBean other = (ResponseBean) obj;
+        ResponseBean2 other = (ResponseBean2) obj;
         if (address == null) {
             if (other.address != null)
                 return false;
@@ -107,6 +109,11 @@ public class ResponseBean {
             if (other.homeTel != null)
                 return false;
         } else if (!homeTel.equals(other.homeTel))
+            return false;
+        if (id == null) {
+            if (other.id != null)
+                return false;
+        } else if (!id.equals(other.id))
             return false;
         if (mobile == null) {
             if (other.mobile != null)
@@ -139,6 +146,12 @@ public class ResponseBean {
         } else if (!workTel.equals(other.workTel))
             return false;
         return true;
+    }
+    public String getId() {
+        return id;
+    }
+    public void setId(String id) {
+        this.id = id;
     }
 
 }

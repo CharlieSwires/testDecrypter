@@ -46,15 +46,16 @@ public class DecrypterService {
 
     private Boolean storeBatch(String result) {
         ObjectMapper m = new ObjectMapper();
-        ResponseBean[] products = null;
+        ResponseBean2[] products = null;
         if (result != null && !result.isEmpty()) {
 
             try {
-                products = m.readValue(result, ResponseBean[].class);
+                products = m.readValue(result, ResponseBean2[].class);
                 if (products == null || products.length == 0) return true;
 
-                for (ResponseBean item : products) {
+                for (ResponseBean2 item : products) {
                     SecondaryMongoBean newItem = new SecondaryMongoBean();
+                    newItem.setId(item.getId());
                     newItem.setAddress(item.getAddress());
                     newItem.setFirstname(item.getFirstname());
                     newItem.setHomeTel(item.getHomeTel());
@@ -75,12 +76,12 @@ public class DecrypterService {
     }
     private Boolean verifyBatch(String result) {
         ObjectMapper m = new ObjectMapper();
-        ResponseBean[] products = null;
+        ResponseBean2[] products = null;
         if (result != null && !result.isEmpty()) {
             try {
-                products = m.readValue(result, ResponseBean[].class);
+                products = m.readValue(result, ResponseBean2[].class);
                 if (products == null || products.length == 0) return true;
-                for (ResponseBean item : products) {
+                for (ResponseBean2 item : products) {
                     if (item == null) return true;
                     if (item.getFirstname() == null ||
                             item.getFirstname().isEmpty() ||
@@ -88,7 +89,8 @@ public class DecrypterService {
                             item.getSurname().isEmpty()) return null;
                     SecondaryMongoBean newItem = secondaryRepository.findByFirstnameSurname(item.getFirstname(), item.getSurname());
                     if (newItem == null) return null;
-                    ResponseBean newResponseBean = new ResponseBean();
+                    ResponseBean2 newResponseBean = new ResponseBean2();
+                    newResponseBean.setId(newItem.getId());
                     newResponseBean.setAddress(newItem.getAddress());
                     newResponseBean.setFirstname(newItem.getFirstname());
                     newResponseBean.setHomeTel(newItem.getHomeTel());
