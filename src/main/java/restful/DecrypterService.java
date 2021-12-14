@@ -24,13 +24,13 @@ public class DecrypterService {
     private SecondaryMongoBeanRepository secondaryRepository;
     private static final int NUM_THREADS = 10;
     private AtomicBoolean finished = new AtomicBoolean(false);
-    
+
     public Boolean start() {
         final String uri = "http://container2:8080/address-book/AddressEntry/getAllArray";
         RestTemplate restTemplate = new RestTemplate();
         int page = 0;
         finished.set(false);
-        while(!finished.getPlain()) {
+        while(!finished.get()) {
             List<Integer> pageThreads = new ArrayList<Integer>();
             for(int i=0; i< NUM_THREADS; i++) {
                 pageThreads.add(page+i);
@@ -55,18 +55,20 @@ public class DecrypterService {
                 if (products == null || products.length == 0) return true;
 
                 for (ResponseBean2 item : products) {
-                    SecondaryMongoBean newItem = new SecondaryMongoBean();
-                    newItem.setId(item.getId());
-                    newItem.setAddress(item.getAddress());
-                    newItem.setFirstname(item.getFirstname());
-                    newItem.setHomeTel(item.getHomeTel());
-                    newItem.setMobile(item.getMobile());
-                    newItem.setPersonalEmail(item.getPersonalEmail());
-                    newItem.setSurname(item.getSurname());
-                    newItem.setTitle(item.getTitle());
-                    newItem.setWorkEmail(item.getWorkEmail());
-                    newItem.setWorkTel(item.getWorkTel());
-                    this.secondaryRepository.save(newItem);
+                    if (item != null) {
+                        SecondaryMongoBean newItem = new SecondaryMongoBean();
+                        newItem.setId(item.getId());
+                        newItem.setAddress(item.getAddress());
+                        newItem.setFirstname(item.getFirstname());
+                        newItem.setHomeTel(item.getHomeTel());
+                        newItem.setMobile(item.getMobile());
+                        newItem.setPersonalEmail(item.getPersonalEmail());
+                        newItem.setSurname(item.getSurname());
+                        newItem.setTitle(item.getTitle());
+                        newItem.setWorkEmail(item.getWorkEmail());
+                        newItem.setWorkTel(item.getWorkTel());
+                        this.secondaryRepository.save(newItem);
+                    }
                 }
             } catch (Exception e) {
                 return true;
@@ -121,7 +123,7 @@ public class DecrypterService {
         RestTemplate restTemplate = new RestTemplate();
         int page = 0;
         finished.set(false);
-        while(!finished.getPlain()) {
+        while(!finished.get()) {
             List<Integer> pageThreads = new ArrayList<Integer>();
             for(int i=0; i< NUM_THREADS; i++) {
                 pageThreads.add(page+i);
