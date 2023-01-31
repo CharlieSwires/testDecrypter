@@ -24,6 +24,9 @@ public class DecrypterService {
     private SecondaryMongoBeanRepository secondaryRepository;
     private static final int NUM_THREADS = 10;
     private AtomicBoolean finished = new AtomicBoolean(false);
+    static {
+    	System.setProperty("java.util.concurrent.ForkJoinPool.common.parallelism", "20");
+    }
 
     public Boolean start() {
         final String uri = "http://container2:8080/address-book/AddressEntry/getAllArray";
